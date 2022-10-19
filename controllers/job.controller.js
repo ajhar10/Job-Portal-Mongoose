@@ -1,6 +1,6 @@
 const Company = require("../models/Company");
 const Application = require("../models/Application");
-const googleDriveService = require("../middleware/googleDriveService");
+// const googleDriveService = require("../middleware/googleDriveService");
 const Job = require("../models/Job");
 const User = require("../models/User");
 const {
@@ -332,13 +332,13 @@ exports.applyJob = async (req, res) => {
       return;
     }
 
-    const auth = googleDriveService.authenticateGoogle();
-    const resume = await googleDriveService.uploadToGoogleDrive(req.file, auth);
-    googleDriveService.deleteFile(req.file.path);
+    // const auth = googleDriveService.authenticateGoogle();
+    // const resume = await googleDriveService.uploadToGoogleDrive(req.file, auth);
+    // googleDriveService.deleteFile(req.file.path);
 
-    const resumeLink = `https://drive.google.com/file/d/${resume.data.id}/view`;
+    // const resumeLink = `https://drive.google.com/file/d/${resume.data.id}/view`;
 
-    const result = await applyJobService(id, user._id, resumeLink);
+    const result = await applyJobService(id, user._id);
 
     res.status(200).json({
       status: "success",

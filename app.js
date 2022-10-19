@@ -1,27 +1,22 @@
 const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
 const app = express();
+const cors = require("cors");
 
-// MIDDLEWARES
+//middlewares
 app.use(express.json());
 app.use(cors());
 
-// ROUTES
-const userRoutes = require("./routes/user.route");
-const jobRoutes = require("./routes/job.route");
-
-// ROUTES USE
-app.use("/user", userRoutes);
-app.use("/", jobRoutes);
+//routes
+const userRoute = require("./routes/user.route");
+const companyRoute = require("./routes/company.route");
+const jobRoute = require("./routes/job.route");
 
 app.get("/", (req, res) => {
-  res.send("Route is working! YaY!");
+  res.send("Welcome to Job Portal Management System");
 });
 
-// NOT FOUND ROUTE
-app.all("*", (req, res) => {
-  res.send("NO route found.");
-});
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/company", companyRoute);
+app.use("/api/v1", jobRoute);
 
 module.exports = app;

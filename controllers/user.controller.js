@@ -8,7 +8,7 @@ const {
   allHiringManagersService,
   candidateByIdService,
 } = require("../services/user.service");
-const { sendMailWithGmail } = require("../utils/email");
+// const { sendMailWithGmail } = require("../utils/email");
 const { generateToken } = require("../utils/token");
 
 exports.signup = async (req, res) => {
@@ -47,15 +47,15 @@ exports.signup = async (req, res) => {
 
     const token = user.generateConfirmationToken();
 
-    await user.save({ validateBeforeSave: false });
+    // await user.save({ validateBeforeSave: false });
 
-    const mailData = {
-      to: [user.email],
-      subject: "Verify your Account",
-      text: `Thank you for creating your account. Please confirm your account here: ${
-        req.protocol
-      }://${req.get("host")}${req.originalUrl}/confirmation/${token}`,
-    };
+    // const mailData = {
+    //   to: [user.email],
+    //   subject: "Verify your Account",
+    //   text: `Thank you for creating your account. Please confirm your account here: ${
+    //     req.protocol
+    //   }://${req.get("host")}${req.originalUrl}/confirmation/${token}`,
+    // };
 
     await sendMailWithGmail(mailData);
 
@@ -141,45 +141,45 @@ exports.getMe = async (req, res) => {
   }
 };
 
-exports.confirmEmail = async (req, res) => {
-  try {
-    const { token } = req.params;
+// exports.confirmEmail = async (req, res) => {
+//   try {
+//     const { token } = req.params;
 
-    const user = await findUserByToken(token);
+//     const user = await findUserByToken(token);
 
-    if (!user) {
-      return res.status(403).json({
-        status: "fail",
-        error: "Invalid token",
-      });
-    }
+//     if (!user) {
+//       return res.status(403).json({
+//         status: "fail",
+//         error: "Invalid token",
+//       });
+//     }
 
-    const expired = new Date() > new Date(user.confirmationTokenExpires);
+//     const expired = new Date() > new Date(user.confirmationTokenExpires);
 
-    if (expired) {
-      return res.status(401).json({
-        status: "fail",
-        error: "Token expired",
-      });
-    }
+//     if (expired) {
+//       return res.status(401).json({
+//         status: "fail",
+//         error: "Token expired",
+//       });
+//     }
 
-    user.status = "active";
-    user.confirmationToken = undefined;
-    user.confirmationTokenExpires = undefined;
+//     user.status = "active";
+//     user.confirmationToken = undefined;
+//     user.confirmationTokenExpires = undefined;
 
-    user.save({ validateBeforeSave: false });
+//     user.save({ validateBeforeSave: false });
 
-    res.status(200).json({
-      status: "success",
-      message: "Successfully activated your account.",
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "fail",
-      error,
-    });
-  }
-};
+//     res.status(200).json({
+//       status: "success",
+//       message: "Successfully activated your account.",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       status: "fail",
+//       error,
+//     });
+//   }
+// };
 
 exports.promoteUserRole = async (req, res) => {
   try {
