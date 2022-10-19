@@ -1,18 +1,27 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
+const mongoose = require("mongoose");
+const app = express();
 
+// MIDDLEWARES
 app.use(express.json());
 app.use(cors());
 
-//routes
+// ROUTES
+const userRoutes = require("./routes/user.route");
+const jobRoutes = require("./routes/job.route");
+
+// ROUTES USE
+app.use("/user", userRoutes);
+app.use("/", jobRoutes);
 
 app.get("/", (req, res) => {
-  res.send("The Port is Working ??Y");
+  res.send("Route is working! YaY!");
 });
 
+// NOT FOUND ROUTE
 app.all("*", (req, res) => {
-  res.send("Route Not Found");
+  res.send("NO route found.");
 });
 
 module.exports = app;

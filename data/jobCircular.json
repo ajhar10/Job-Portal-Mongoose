@@ -1,0 +1,10 @@
+[
+  {
+    "email": "abc.hr@gmail.com",
+    "title": "Back End developer",
+    "description": "Implement backend server with mongoose",
+    "location": "remote",
+    "salary": 3000,
+    "status": "full-time"
+  }
+]
