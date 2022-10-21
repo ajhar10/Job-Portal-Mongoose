@@ -15,10 +15,10 @@ const {
 
 exports.createJob = async (req, res, next) => {
   try {
-    //check user token to find manager's company id. if it doesnt match with req.body.companyInfo then return
+    // check user token to find manager's company id. if it doesnt match with req.body.companyInfo then return
     const { email } = req.user;
     const manager = await User.findOne({ email });
-    //get the company in which this manager is assigned
+    // get the company in which this manager is assigned
     const company = await Company.findOne({ managerName: manager._id });
 
     const { companyInfo } = req.body;
@@ -66,6 +66,7 @@ exports.getJobsByManagerToken = async (req, res) => {
     const user = await User.findOne({ email }).select(
       "-password -__v -createdAt -updatedAt -role -status -appliedJobs"
     );
+
     //get company by this user from Company model inside managerName field
     const company = await Company.findOne({ managerName: user._id });
 
@@ -74,16 +75,19 @@ exports.getJobsByManagerToken = async (req, res) => {
       path: "companyInfo",
       select: "-jobPosts",
     });
+    // console.log(jobs);
     //find the jobs by company id
-    const jobsByCompany = jobs.filter((job) => {
-      return job.companyInfo._id.toString() == company._id.toString();
-    });
+    // console.log(company._id.toString());
+    // const jobsByCompany = jobs.filter((job) => {
+    //   job.companyInfo._id.toString() == company._id.toString();
+    // });
+    // console.log(jobsByCompany);
 
     res.status(200).json({
       status: "success",
       data: {
         managerInfo: user,
-        jobs: jobsByCompany,
+        jobs: jobs,
       },
     });
   } catch (error) {
@@ -102,8 +106,9 @@ exports.getJobByManagerTokenJobId = async (req, res) => {
     const user = await User.findOne({ email }).select(
       "-password -__v -createdAt -updatedAt -role -status -appliedJobs"
     );
+    console.log(user);
     //get company by this user from Company model inside managerName field
-    const company = await Company.findOne({ managerName: user._id });
+    // const company = await Company.findOne({ managerName: user._id });
 
     //get all jobs
     const jobs = await Job.find({})
@@ -119,15 +124,6 @@ exports.getJobByManagerTokenJobId = async (req, res) => {
             "-password -__v -createdAt -updatedAt -role -status -appliedJobs",
         },
         select: "-job",
-      })
-      .populate({
-        path: "companyInfo",
-        select: "-jobPosts",
-        populate: {
-          path: "managerName",
-          select:
-            "-password -__v -createdAt -updatedAt -role -status -appliedJobs",
-        },
       });
 
     //find the required job from jobs  with req.params id
@@ -137,12 +133,12 @@ exports.getJobByManagerTokenJobId = async (req, res) => {
     });
 
     //check if managerName.email is equal to req.user.email
-    if (req.user.email !== job.companyInfo.managerName.email) {
-      return res.status(400).json({
-        status: "fail",
-        message: "You are not authorized to get internal data of this job",
-      });
-    }
+    // if (req.user.email !== job.companyInfo.managerName.email) {
+    //   return res.status(400).json({
+    //     status: "fail",
+    //     message: "You are not authorized to get internal data of this job",
+    //   });
+    // }
 
     res.status(200).json({
       status: "success",

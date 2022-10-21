@@ -26,6 +26,7 @@ module.exports = async (req, res, next) => {
     // const user = User.findOne({ email: decoded.email })
 
     req.user = decoded;
+    // console.log(decoded);
 
     next();
   } catch (error) {

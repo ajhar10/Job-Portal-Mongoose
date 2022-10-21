@@ -13,35 +13,35 @@ const { generateToken } = require("../utils/token");
 
 exports.signup = async (req, res) => {
   try {
-    if (req.body.role === "Admin") {
-      return res.status(403).json({
-        status: "fail",
-        error:
-          "You are not allowed to create admin account. Please contact the admin",
-      });
-    }
-    if (req.body.role === "Hiring-Manager") {
-      return res.status(403).json({
-        status: "fail",
-        error:
-          "You are not allowed to create hiring manager account. Please contact the admin",
-      });
-    }
+    // if (req.body.role === "Admin") {
+    //   return res.status(403).json({
+    //     status: "fail",
+    //     error:
+    //       "You are not allowed to create admin account. Please contact the admin",
+    //   });
+    // }
+    // if (req.body.role === "Hiring-Manager") {
+    //   return res.status(403).json({
+    //     status: "fail",
+    //     error:
+    //       "You are not allowed to create hiring manager account. Please contact the admin",
+    //   });
+    // }
 
-    if (req.body.status === "active") {
-      return res.status(403).json({
-        status: "fail",
-        error:
-          "Please don't provide status. It will be automatically set to inactive. You will be able to activate your account by clicking the link sent to your email",
-      });
-    }
+    // if (req.body.status === "active") {
+    //   return res.status(403).json({
+    //     status: "fail",
+    //     error:
+    //       "Please don't provide status. It will be automatically set to inactive. You will be able to activate your account by clicking the link sent to your email",
+    //   });
+    // }
 
-    if (req.body.status === "blocked") {
-      return res.status(403).json({
-        status: "fail",
-        error: "You cannot create a blocked account.",
-      });
-    }
+    // if (req.body.status === "blocked") {
+    //   return res.status(403).json({
+    //     status: "fail",
+    //     error: "You cannot create a blocked account.",
+    //   });
+    // }
 
     const user = await signupService(req.body);
 
@@ -57,7 +57,7 @@ exports.signup = async (req, res) => {
     //   }://${req.get("host")}${req.originalUrl}/confirmation/${token}`,
     // };
 
-    await sendMailWithGmail(mailData);
+    // await sendMailWithGmail(mailData);
 
     res.status(200).json({
       status: "success",
@@ -141,45 +141,45 @@ exports.getMe = async (req, res) => {
   }
 };
 
-// exports.confirmEmail = async (req, res) => {
-//   try {
-//     const { token } = req.params;
+exports.confirmEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
 
-//     const user = await findUserByToken(token);
+    const user = await findUserByToken(token);
 
-//     if (!user) {
-//       return res.status(403).json({
-//         status: "fail",
-//         error: "Invalid token",
-//       });
-//     }
+    if (!user) {
+      return res.status(403).json({
+        status: "fail",
+        error: "Invalid token",
+      });
+    }
 
-//     const expired = new Date() > new Date(user.confirmationTokenExpires);
+    const expired = new Date() > new Date(user.confirmationTokenExpires);
 
-//     if (expired) {
-//       return res.status(401).json({
-//         status: "fail",
-//         error: "Token expired",
-//       });
-//     }
+    if (expired) {
+      return res.status(401).json({
+        status: "fail",
+        error: "Token expired",
+      });
+    }
 
-//     user.status = "active";
-//     user.confirmationToken = undefined;
-//     user.confirmationTokenExpires = undefined;
+    user.status = "active";
+    user.confirmationToken = undefined;
+    user.confirmationTokenExpires = undefined;
 
-//     user.save({ validateBeforeSave: false });
+    user.save({ validateBeforeSave: false });
 
-//     res.status(200).json({
-//       status: "success",
-//       message: "Successfully activated your account.",
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       status: "fail",
-//       error,
-//     });
-//   }
-// };
+    res.status(200).json({
+      status: "success",
+      message: "Successfully activated your account.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "fail",
+      error,
+    });
+  }
+};
 
 exports.promoteUserRole = async (req, res) => {
   try {

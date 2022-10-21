@@ -3,15 +3,10 @@ const dotenv = require("dotenv").config();
 const colors = require("colors");
 
 const app = require("./app");
+const dbConnect = require("./utils/dbConnect");
 
 // DATABASE CONNECTION
-mongoose
-  .connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-  })
-  .then(() => {
-    console.log("Database connection is successfully");
-  });
+dbConnect();
 
 // server
 const port = process.env.PORT || 8080;

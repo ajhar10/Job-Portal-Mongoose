@@ -15,8 +15,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to Job Portal Management System");
 });
 
-app.use("/api/v1/user", userRoute);
-app.use("/api/v1/company", companyRoute);
-app.use("/api/v1", jobRoute);
+app.use("/user", userRoute);
+app.use("/company", companyRoute);
+app.use("/", jobRoute);
 
 module.exports = app;
